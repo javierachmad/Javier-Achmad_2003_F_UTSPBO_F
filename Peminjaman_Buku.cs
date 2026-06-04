@@ -1,81 +1,110 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 public abstract class PinjamBuku
 {
-    private string namaAnggota { get; set; }
-    private int idAnggota { get; set; }
-    private string judulBuku { get; set; }
-  
-    public PinjamBuku(string namaAnggota, int idAnggota, string judulBuku)
+    private string namaAnggota;
+    private string idAnggota;
+    private string judulBuku;
+
+    public string NamaAnggota
+    {
+        get { return namaAnggota; }
+        set { namaAnggota = value; }
+    }
+
+    public string IdAnggota
+    {
+        get { return idAnggota; }
+        set { idAnggota = value; }
+    }
+
+    public string JudulBuku
+    {
+        get { return judulBuku; }
+        set { judulBuku = value; }
+    }
+
+    public PinjamBuku(string namaAnggota, string idAnggota, string judulBuku)
     {
         this.namaAnggota = namaAnggota;
         this.idAnggota = idAnggota;
         this.judulBuku = judulBuku;
     }
 
-  
+    public abstract int HitungBiayaPinjam(int lamaHari);
 
-    public abstract void hitungBiayaPinjam(decimal jumlah);
-    
-    public void TampilkanInfo()
+    public virtual void TampilInfo()
     {
-        Console.WriteLine($"{namaAnggota} dengan id {idAnggota} meminjam buku dengan judul {judulBuku}");
+        Console.WriteLine($"Anggota: {namaAnggota} | ID: {idAnggota} | Buku: {judulBuku}");
     }
-    
 }
 
 class BukuReguler : PinjamBuku
 {
-    private static int idAnggota;
-    private static string judulBuku;
-    private static string namaAnggota;
-    public int biayaPerHari;
-    
-    public BukuReguler (int biayaPerHari) : base(string namaAnggota, int idAnggota, string judulBuku)
+    public int BiayaPerHari { get; set; }
+
+    public BukuReguler(string namaAnggota, string idAnggota, string judulBuku, int biayaPerHari)
+        : base(namaAnggota, idAnggota, judulBuku)
     {
-        this.biayaPerHari = biayaPerHari;
+        this.BiayaPerHari = biayaPerHari;
     }
 
-    public override void hitungBiayaPinjam(decimal jumlah)
+    public override int HitungBiayaPinjam(int lamaHari)
     {
-        jumlah = 10 * 10000;
-    }
-    
-    public void TampilkanInfo()
-    {  
-        Console.WriteLine($"biaya Peminjaman buku reguler {biayaPerHari}");
+        return lamaHari * BiayaPerHari;
     }
 }
 
 class BukuReferensi : PinjamBuku
 {
-    private static int idAnggota;
-    private static string judulBuku;
-    private static string namaAnggota;
-    public int biayaPerHari;
-    public int biayaAsuransi;
+    public int BiayaPerHari { get; set; }
+    public int BiayaAsuransi { get; set; }
 
-    public BukuReferensi (int biayaPerHari, int biayaAsuransi, string namaAnggota1) : base(string namaAnggota, int idAnggota,string judulBuku)
+    public BukuReferensi(string namaAnggota, string idAnggota, string judulBuku, int biayaPerHari, int biayaAsuransi)
+        : base(namaAnggota, idAnggota, judulBuku)
     {
-        this.biayaPerHari = biayaPerHari;
-        this.biayaAsuransi = biayaAsuransi;
+        this.BiayaPerHari = biayaPerHari;
+        this.BiayaAsuransi = biayaAsuransi;
     }
 
-    public override void hitungBiayaPinjam(decimal jumlah)
+    public override int HitungBiayaPinjam(int lamaHari)
     {
-        jumlah = (10 * 10000) + 20000;
+        return (lamaHari * BiayaPerHari) + BiayaAsuransi;
     }
-
-
-
 }
 
+class RiwayatPinjam
+{
+    public string JenisBuku { get; set; }
+    public int LamaHari { get; set; }
+    public string TanggalPinjam { get; set; }
 
+    private static List<RiwayatPinjam> daftarRiwayat = new List<RiwayatPinjam>();
 
+    public RiwayatPinjam(string jenisBuku, int lamaHari, string tanggalPinjam)
+    {
+        this.JenisBuku = jenisBuku;
+        this.LamaHari = lamaHari;
+        this.TanggalPinjam = tanggalPinjam;
+    }
 
+    public void TambahPinjam()
+    {
+        daftarRiwayat.Add(this);
+    }
 
+    public static void CetakRiwayat()
+    {
+        for (int i = 0; i < daftarRiwayat.Count; i++)
+        {
+            Console.WriteLine($"{i + 1}. {daftarRiwayat[i].JenisBuku} | {daftarRiwayat[i].LamaHari} hari | {daftarRiwayat[i].TanggalPinjam}");
+        }
+    }
 
-
+    public override string ToString()
+    {
+        return $"{JenisBuku} | {LamaHari} hari | {TanggalPinjam}";
+    }
+}
 
