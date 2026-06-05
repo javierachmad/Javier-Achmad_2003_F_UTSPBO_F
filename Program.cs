@@ -12,7 +12,7 @@
         buku1.TampilInfo();
         Console.WriteLine($"Total Biaya: Rp {totalBiaya}");
 
-        RiwayatPinjam riwayat = new RiwayatPinjam("Referensi", lamaHari, "15-10-2025");
+        RiwayatPinjam riwayat = new RiwayatPinjam("Referensi", lamaHari, "05-06-2026");
         riwayat.TambahPinjam();
         RiwayatPinjam.CetakRiwayat();
     }
